@@ -6,13 +6,17 @@ import App from "../components/App";
 
 test("calls the onTaskFormSubmit callback prop when the form is submitted", () => {
   const onTaskFormSubmit = jest.fn();
-  render(
-    <NewTaskForm categories={CATEGORIES} onTaskFormSubmit={onTaskFormSubmit} />
-  );
+    render(<NewTaskForm categories={['Code', 'Food']} onTaskFormSubmit={onTaskFormSubmit} />)
 
   fireEvent.change(screen.queryByLabelText(/Details/), {
     target: { value: "Pass the tests" },
   });
+  fireEvent.click(screen.getByRole("button", { name: /add task/i }));
+  expect(onTaskFormSubmit).toHaveBeenCalledWith({
+    text: "Pass the tests",
+    category: "Code", // assuming "Code" is the default selected category
+  });
+
 
   fireEvent.change(screen.queryByLabelText(/Category/), {
     target: { value: "Code" },
